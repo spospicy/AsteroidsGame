@@ -15,7 +15,15 @@ class Floater //Do NOT modify the Floater class! Make changes in the Spaceship c
     double dRadians =myPointDirection*(Math.PI/180);     
     //change coordinates of direction of travel    
     myDirectionX += ((dAmount) * Math.cos(dRadians));    
-    myDirectionY += ((dAmount) * Math.sin(dRadians));       
+    myDirectionY += ((dAmount) * Math.sin(dRadians));
+    if(myDirectionX > 5)
+      myDirectionX = 5;
+    if(myDirectionX < -5)
+      myDirectionX = -5;
+    if(myDirectionY > 5)
+      myDirectionY = 5;
+    if(myDirectionY < -5)
+      myDirectionY = -5;
   }   
   public void turn (int nDegreesOfRotation)   
   {     
