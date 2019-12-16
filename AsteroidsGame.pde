@@ -1,7 +1,8 @@
 //your variable declarations here
-Spaceship ship;
-Star[] skyStar = new Star[200];
-ArrayList <Asteroid> asteroids = new ArrayList <Asteroid>();
+private Spaceship ship;
+private Star[] skyStar = new Star[200];
+private ArrayList <Asteroid> asteroidList = new ArrayList <Asteroid>();
+private ArrayList <Bullet> bulletList = new ArrayList <Bullet>();
 public void setup() 
 {
   //your code here
@@ -14,7 +15,7 @@ public void setup()
   }
   for(int i = 0; i < 20; i++)
   {
-  	asteroids.add(new Asteroid());
+  	asteroidList.add(new Asteroid());
   }
 }
 public void draw() 
@@ -27,17 +28,48 @@ public void draw()
   {
   	skyStar[i].show();
   }
-  for(int i = 0; i < asteroids.size(); i++)
+  for(int i = 0; i < asteroidList.size(); i++)
   {
-  	asteroids.get(i).show();
-  	asteroids.get(i).move();
+  	Asteroid asteroid = asteroidList.get(i);
+  	asteroid.show();
+  	asteroid.move();
   }
+  for(int i = 0; i < bulletList.size(); i++){
+    Bullet bullet = bulletList.get(i);
+    bullet.move();
+    bullet.accelerate(6);
+    bullet.show();
+  }
+  for(int y = 0; y < bulletList.size(); y++)
+  {
+  	Bullet currentBullet = bulletList.get(y);
+  	for(int i = 0; i < asteroidList.size(); i++)
+  	{
+  		Asteroid currentAsteroid = asteroidList.get(i);
+  		if(dist((float)currentAsteroid.getX(), (float)currentAsteroid.getY(), (float)currentBullet.getX(), (float)currentBullet.getY())<20)
+  		{
+  			asteroidList.remove(i);
+  			bulletList.remove(y);
+  			i = i - 1;
+  		}
+  	}
+  }
+  for(int i = 0; i < asteroidList.size(); i++)
+  {
+  	Asteroid currentAsteroid = asteroidList.get(i);
+  	if(dist((float)currentAsteroid.getX(),(float)currentAsteroid.getY(),ship.getX(),ship.getY())<20)
+  	{
+  		asteroidList.remove(i);
+  		i--;
+  	}
+  }
+  
   if (keyPressed)
 	{
 		if(key == 'a')
-			ship.turn(-10);
+			ship.turn(-5);
 		if(key == 'd')
-			ship.turn(10);
+			ship.turn(5);
 		if(key == 'w')
 			ship.accelerate(.1);
 		if(key == 's')
@@ -60,9 +92,9 @@ public void draw()
 	}
 }
 public void keyPressed()
-{
-	if(key == 'h')
+	{
+		if(key == 'h')
 			ship.hyperSpace();
-}
-
-
+		if(key == 'q')
+			bulletList.add(new Bullet(ship));
+	}
